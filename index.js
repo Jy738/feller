@@ -14,20 +14,26 @@ const Global = {
       return result;
     }
   },
+  Default:{
+      hiddenLayers:[10,20,20,10],
+    iterations:1000,
+    samples:5
+  },
   types:{
     newGeneration:()=>{
       
     },
     "evolutionary_basic": (net,options) => {
+      if(options == undefined)options = {};
       if(options.iterations == undefined)options.iterations = 1000;
       if(options.samples == undefined)options.samples = 5;
       let samples = [];
       for(let currentSample = 0; currentSample < options.samples; currentSample++){
-         let newNet = net.nodeFull;
+         let newNet = net.layers;
          samples = [...samples,newNet];
-         for(let nodeQueue = 0; nodeQueue < newNet.hiddenLayers.length; nodeQueue++){
-            let currentNode = newNet[nodeQueue];
-            currentNoode
+         for(let nodeQueue = 0; nodeQueue < newNet[0].length; nodeQueue++){
+            let currentNode = newNet[0][nodeQueue];
+            
           }
       }
     }
@@ -36,11 +42,21 @@ const Global = {
 
 class NeuralThrembo {
   constructor(options){
-    if(options.hiddenLayers == undefined)options.hiddenLayers = [10,20,10]; //formatting for hiddenlayers stolen from brain.js
+    if(options == undefined){
+      options = Global.Default.Options;
+    }
+    if(options.hiddenLayers == undefined)options.hiddenLayers = Global.Default.hiddenLayers; //formatting for hiddenlayers stolen from brain.js
     
     this.config = options;
-    this.node = {};
-    this.node.hiddenLayers = this.config.hiddenLayers;
+    this.layers = [
+    ];
+    for(let layer = 0;layer<this.config.hiddenLayers.length;layer++){
+      this.layers[layer] = [];
+      for(let nodeQueue = 0;nodeQueue<this.config.hiddenLayers[layer];nodeQueue++;){
+        this.layers[layer][nodeQueue] = {weight:Math.random(),bias:Math.random()}
+      }
+    }
+    console.log(this.layers);
   }
   train(options){
     if(options.type == "undefined")options.type = "evolutionary_basic";
